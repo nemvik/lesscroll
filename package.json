@@ -4,7 +4,7 @@
   "private": true,
   "description": "A private, local-first Chrome extension that interrupts mindless scrolling without blocking websites.",
   "license": "MIT",
-  "homepage": "https://lesscroll.nemvik.chatgpt.site",
+  "homepage": "https://lesscroll.nemvik.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/nemvik/lesscroll.git"

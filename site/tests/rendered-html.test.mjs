@@ -86,7 +86,11 @@ test("social preview metadata uses the public site URL", async () => {
   const response = await render();
   const html = await response.text();
 
-  assert.match(html, /<meta[^>]+property="og:image"[^>]+content="https:\/\/lesscroll\.nemvik\.chatgpt\.site\/og\.png"/i);
+  assert.match(
+    html,
+    /<meta[^>]+property="og:image"[^>]+content="https:\/\/lesscroll\.nemvik\.com\/og\.png"/i,
+  );
+  assert.doesNotMatch(html, /lesscroll\.nemvik\.chatgpt\.site/i);
   assert.match(html, /<meta[^>]+name="twitter:card"[^>]+content="summary_large_image"/i);
   await access(new URL("public/og.png", projectRoot));
 });

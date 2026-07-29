@@ -9,9 +9,10 @@
 </p>
 
 <p align="center">
-  <a href="https://lesscroll.nemvik.chatgpt.site">Website</a> ·
-  <a href="https://lesscroll.nemvik.chatgpt.site/privacy">Privacy</a> ·
-  <a href="https://lesscroll.nemvik.chatgpt.site/#support">Support</a> ·
+  <a href="https://lesscroll.nemvik.com/">Website</a> ·
+  <a href="https://chromewebstore.google.com/detail/lesscroll/mmlpldkiccpikaihihbcfkaffigapfjg">Chrome Web Store</a> ·
+  <a href="https://lesscroll.nemvik.com/privacy">Privacy</a> ·
+  <a href="https://lesscroll.nemvik.com/#support">Support</a> ·
   <a href="SECURITY.md">Security</a> ·
   <a href="https://github.com/nemvik/lesscroll/issues">Issues</a> ·
   <a href="LICENSE">MIT License</a>
@@ -45,8 +46,7 @@ spent, and leaves the decision with you.
 
 ## Installation
 
-The public Chrome Web Store link will be added when the listing is live. Until
-then, you can build and load the extension from source.
+[Install Lesscroll from the Chrome Web Store](https://chromewebstore.google.com/detail/lesscroll/mmlpldkiccpikaihihbcfkaffigapfjg).
 
 ### Build from source
 
@@ -99,7 +99,7 @@ The injected overlay uses text nodes, pure DOM creation, and Shadow DOM. It does
 not use `innerHTML`, `eval`, remote JavaScript, or remote CSS. Stored data and
 runtime messages are validated at the service-worker boundary.
 
-See the full [privacy policy](https://lesscroll.nemvik.chatgpt.site/privacy) and
+See the full [privacy policy](https://lesscroll.nemvik.com/privacy) and
 [security policy](SECURITY.md).
 
 ## Stored data

@@ -35,15 +35,15 @@ Lesscroll is a behavioral interrupt, not a website blocker. The final choice alw
 
 **Homepage URL**
 
-`https://lesscroll.nemvik.chatgpt.site`
+`https://lesscroll.nemvik.com/`
 
 **Support URL**
 
-`https://lesscroll.nemvik.chatgpt.site/#support`
+`https://lesscroll.nemvik.com/#support`
 
 **Privacy policy URL**
 
-`https://lesscroll.nemvik.chatgpt.site/privacy`
+`https://lesscroll.nemvik.com/privacy`
 
 **Support email**
 

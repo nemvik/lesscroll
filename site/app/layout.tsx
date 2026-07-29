@@ -4,7 +4,7 @@ import "./globals.css";
 
 const description =
   "Pause mindless scrolling with intentional reminders. Private, local-first, and always your choice.";
-const publicSiteUrl = "https://lesscroll.nemvik.chatgpt.site";
+const publicSiteUrl = "https://lesscroll.nemvik.com";
 const ogImage = `${publicSiteUrl}/og.png`;
 
 export const metadata: Metadata = {

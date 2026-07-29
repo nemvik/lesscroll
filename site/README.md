@@ -1,7 +1,7 @@
 # Lesscroll website
 
 This directory contains the public Lesscroll website and privacy policy served
-at [lesscroll.nemvik.chatgpt.site](https://lesscroll.nemvik.chatgpt.site).
+at [lesscroll.nemvik.com](https://lesscroll.nemvik.com/).
 
 It is a static informational site built with Next.js-compatible components,
 vinext, Vite, and the Cloudflare runtime. It has no database, authentication,
