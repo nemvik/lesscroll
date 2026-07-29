@@ -1,0 +1,17 @@
+:root { color-scheme: light; font-family: ui-rounded, "SF Pro Rounded", "Avenir Next", system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #f4efe5; color: #20302b; }
+.focus-page { position: relative; display: grid; min-height: 100vh; place-items: center; overflow: hidden; padding: 30px; }
+.brand { position: absolute; top: 30px; left: 34px; margin: 0; font-weight: 850; }
+section { position: relative; z-index: 1; width: min(660px, 100%); text-align: center; }
+h1 { margin: 0; font-size: clamp(58px, 11vw, 118px); line-height: .88; letter-spacing: -.07em; }
+section > p { max-width: 570px; margin: 28px auto; color: #64736c; font-size: clamp(17px, 2.4vw, 22px); line-height: 1.55; }
+button { border: 0; border-radius: 15px; padding: 14px 22px; background: #20302b; color: #fffaf1; font: inherit; font-weight: 800; cursor: pointer; }
+button:focus-visible { outline: 3px solid #d18f5a; outline-offset: 4px; }
+small { display: block; margin-top: 14px; color: #7c8781; }
+.orb { position: absolute; width: min(72vw, 780px); aspect-ratio: 1; border: 2px solid #8ab1a4; border-radius: 50%; opacity: .42; transform: rotate(-22deg); }
+.orb span { display: block; width: 50%; height: 100%; border-radius: 100% 0 0 100%; background: #b8d0c5; }
+@media (prefers-reduced-motion: no-preference) { section { animation: rise .55s ease-out both; }
+  .orb { animation: breathe 8s ease-in-out infinite alternate; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+  @keyframes breathe { to { transform: rotate(-15deg) scale(1.04); } } }

@@ -1,0 +1,42 @@
+{
+  "name": "lesscroll",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A private, local-first Chrome extension that interrupts mindless scrolling without blocking websites.",
+  "license": "MIT",
+  "homepage": "https://lesscroll.nemvik.chatgpt.site",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nemvik/lesscroll.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nemvik/lesscroll/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "tldts": "7.4.9"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@wxt-dev/module-react": "1.2.2",
+    "jsdom": "^27.0.0",
+    "typescript": "^7.0.0",
+    "vitest": "4.1.10",
+    "wxt": "0.21.1"
+  },
+  "packageManager": "pnpm@11.7.0"
+}

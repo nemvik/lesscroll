@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Lesscroll promo renderer</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: ui-rounded, "SF Pro Rounded", "Avenir Next", system-ui, sans-serif;
+        --ink: #20302b;
+        --sage: #3f816f;
+        --cream: #f5f0e7;
+        --paper: #fffaf1;
+        --mist: #dce9e3;
+        --muted: #64736c;
+        --gold: #d18f5a;
+      }
+
+      * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
+      html, body { width: 100%; height: 100%; }
+      body { margin: 0; overflow: hidden; background: var(--ink); }
+
+      .canvas {
+        position: relative;
+        width: 1280px;
+        height: 800px;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 14% 84%, rgba(209, 143, 90, .25), transparent 26%),
+          linear-gradient(135deg, #29463d 0%, #346b5d 58%, #3f816f 100%);
+        color: var(--paper);
+      }
+
+      .orb {
+        position: absolute;
+        left: -195px;
+        bottom: -270px;
+        width: 660px;
+        height: 660px;
+        border: 2px solid rgba(245, 240, 231, .18);
+        border-radius: 50%;
+      }
+
+      .orb::after {
+        content: "";
+        display: block;
+        width: 50%;
+        height: 100%;
+        border-radius: 100% 0 0 100%;
+        background: rgba(245, 240, 231, .075);
+      }
+
+      .brand {
+        position: absolute;
+        top: 40px;
+        left: 48px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 18px;
+        font-weight: 850;
+        letter-spacing: -.01em;
+      }
+
+      .mark {
+        width: 34px;
+        height: 34px;
+        border: 2px solid #cfe6dc;
+        border-radius: 50%;
+        background: conic-gradient(#cfe6dc 0 50%, transparent 50%);
+        transform: rotate(-25deg);
+      }
+
+      .copy {
+        position: absolute;
+        z-index: 2;
+        top: 188px;
+        left: 48px;
+        width: 345px;
+      }
+
+      .eyebrow {
+        margin: 0 0 15px;
+        color: #cfe6dc;
+        font-size: 12px;
+        font-weight: 850;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .copy h1 {
+        margin: 0;
+        font-size: 64px;
+        line-height: .95;
+        letter-spacing: -.065em;
+        white-space: pre-line;
+      }
+
+      .copy > p:last-of-type {
+        width: 315px;
+        margin: 24px 0 0;
+        color: #d7e8e1;
+        font-size: 17px;
+        line-height: 1.55;
+      }
+
+      .proof {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 26px;
+      }
+
+      .proof span {
+        border: 1px solid rgba(245, 240, 231, .27);
+        border-radius: 99px;
+        padding: 8px 11px;
+        background: rgba(17, 39, 32, .18);
+        color: #edf5f1;
+        font-size: 11px;
+        font-weight: 780;
+      }
+
+      .browser {
+        position: absolute;
+        top: 56px;
+        right: 48px;
+        width: 820px;
+        height: 688px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .22);
+        border-radius: 22px;
+        background: #f7f5f0;
+        box-shadow: 0 35px 100px rgba(6, 23, 18, .33);
+      }
+
+      .browser-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 52px;
+        padding: 0 17px;
+        border-bottom: 1px solid #d8d9d4;
+        background: #e9e9e5;
+      }
+
+      .browser-dot { width: 10px; height: 10px; border-radius: 50%; background: #b9bcb7; }
+      .browser-dot:nth-child(1) { background: #d58d76; }
+      .browser-dot:nth-child(2) { background: #dbbd72; }
+      .browser-dot:nth-child(3) { background: #7eb092; }
+
+      .address {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 590px;
+        height: 30px;
+        margin-left: 8px;
+        border: 1px solid #d1d3ce;
+        border-radius: 9px;
+        padding: 0 13px;
+        background: #f9f9f7;
+        color: #69716c;
+        font-size: 12px;
+      }
+
+      .lock {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #6f9d8c;
+      }
+
+      .toolbar-mark {
+        width: 26px;
+        height: 26px;
+        border: 2px solid var(--sage);
+        border-radius: 7px;
+        background: conic-gradient(var(--sage) 0 50%, #f5f0e7 50%);
+        transform: rotate(-8deg);
+      }
+
+      .page {
+        position: relative;
+        height: calc(100% - 52px);
+        overflow: hidden;
+        background: #f8f7f3;
+        color: #2e3935;
+      }
+
+      .site-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+        padding: 0 30px;
+        border-bottom: 1px solid #e0e1dc;
+        background: rgba(255, 255, 255, .9);
+      }
+
+      .site-logo { font-size: 17px; font-weight: 900; letter-spacing: .12em; }
+      .site-nav { display: flex; gap: 9px; }
+      .site-nav span { width: 66px; height: 9px; border-radius: 99px; background: #d9ddd8; }
+
+      .feed-layout { display: grid; grid-template-columns: 160px 1fr; min-height: 566px; }
+      .feed-sidebar { border-right: 1px solid #e1e2dd; padding: 26px 22px; background: #f1f2ed; }
+      .feed-sidebar span { display: block; height: 10px; margin-bottom: 21px; border-radius: 99px; background: #d6dad5; }
+      .feed-sidebar span:nth-child(1), .feed-sidebar span:nth-child(4) { width: 82px; background: #9ab8ac; }
+      .feed-sidebar span:nth-child(2) { width: 105px; }
+      .feed-sidebar span:nth-child(3) { width: 93px; }
+      .feed-sidebar span:nth-child(5) { width: 115px; }
+
+      .feed-viewport { position: relative; overflow: hidden; padding: 27px; }
+      .feed-track { transform: translateY(0); }
+      .feed-title { width: 240px; height: 23px; margin-bottom: 22px; border-radius: 99px; background: #bfcac4; }
+      .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 17px; }
+      .card { overflow: hidden; border: 1px solid #dfe0db; border-radius: 16px; background: #fff; }
+      .card-art { position: relative; height: 132px; background: linear-gradient(140deg, #becfc7, #e0ddd2); }
+      .card:nth-child(2) .card-art { background: linear-gradient(140deg, #d9c6ae, #f0e8dd); }
+      .card:nth-child(3) .card-art { background: linear-gradient(140deg, #a9c2bd, #dfeae4); }
+      .card:nth-child(4) .card-art { background: linear-gradient(140deg, #d3b59f, #e8d6c7); }
+      .card-art::before { content: ""; position: absolute; inset: 34px 42px; border-radius: 50%; background: rgba(255, 255, 255, .45); }
+      .card-copy { padding: 15px; }
+      .line { height: 9px; margin-bottom: 9px; border-radius: 99px; background: #d6dad5; }
+      .line.short { width: 58%; margin-bottom: 0; background: #e2e4df; }
+
+      .overlay {
+        position: absolute;
+        z-index: 5;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: rgba(21, 32, 29, .78);
+        backdrop-filter: blur(8px);
+      }
+
+      .dialog {
+        width: 485px;
+        border: 1px solid rgba(46, 92, 79, .18);
+        border-radius: 27px;
+        padding: 29px;
+        background: var(--cream);
+        color: var(--ink);
+        box-shadow: 0 28px 90px rgba(4, 20, 15, .34);
+      }
+
+      .dialog-mark {
+        width: 37px;
+        height: 37px;
+        margin-bottom: 23px;
+        border: 2px solid var(--sage);
+        border-radius: 50%;
+        background: conic-gradient(var(--sage) 0 50%, transparent 50%);
+        transform: rotate(-25deg);
+      }
+
+      .dialog h2 { margin: 0; font-size: 46px; line-height: 1; letter-spacing: -.045em; }
+      .dialog-message { margin: 13px 0 20px; color: #53665f; font-size: 15px; line-height: 1.5; }
+      .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 20px; }
+      .stat { border-radius: 14px; padding: 12px 14px; background: #e9e5dc; }
+      .stat-label { display: block; margin-bottom: 4px; color: #66766f; font-size: 10px; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+      .stat-value { font-size: 18px; font-weight: 800; }
+      .actions { display: grid; gap: 8px; }
+      .action {
+        display: grid;
+        min-height: 42px;
+        place-items: center;
+        border: 1px solid #b9c3bd;
+        border-radius: 13px;
+        background: transparent;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 780;
+      }
+
+      .action.primary { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+      .action.hovered { background: #e4e1d8; }
+      .action.clicked { transform: scale(.985); background: #d9d7cf; }
+
+      .popup-panel {
+        position: absolute;
+        z-index: 4;
+        top: 10px;
+        right: 18px;
+        width: 368px;
+        min-height: 506px;
+        border: 1px solid #d8d3c9;
+        border-radius: 18px;
+        padding: 22px;
+        background: var(--cream);
+        color: var(--ink);
+        box-shadow: 0 25px 60px rgba(24, 43, 36, .24);
+      }
+
+      .popup-brand { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 850; }
+      .popup-mark { width: 24px; height: 24px; border: 2px solid var(--sage); border-radius: 50%; background: conic-gradient(var(--sage) 0 50%, transparent 50%); transform: rotate(-25deg); }
+      .popup-current { padding: 27px 0 24px; border-bottom: 1px solid #d9d4ca; }
+      .popup-eyebrow { margin: 0 0 8px; color: #738079; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .popup-heading { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
+      .popup-heading h2 { overflow: hidden; margin: 0; font-size: 24px; letter-spacing: -.035em; text-overflow: ellipsis; white-space: nowrap; }
+      .status { border-radius: 99px; padding: 5px 8px; background: #d8e8df; color: #2f6c5d; font-size: 9px; font-weight: 850; }
+      .usage { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 19px; }
+      .usage > div { border-radius: 14px; padding: 13px; background: #ebe7de; }
+      .usage span { display: block; color: #6c7871; font-size: 10px; font-weight: 720; }
+      .usage strong { display: block; margin-top: 5px; font-size: 20px; }
+      .progress { height: 5px; margin-top: 9px; overflow: hidden; border-radius: 99px; background: #d2d3cc; }
+      .progress::after { content: ""; display: block; width: 64%; height: 100%; border-radius: inherit; background: var(--sage); }
+      .progress.daily::after { width: 47%; }
+      .rules { padding-top: 22px; }
+      .rules-heading { display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 800; }
+      .rule { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0dbd1; }
+      .rule strong, .rule small { display: block; }
+      .rule strong { font-size: 13px; }
+      .rule small { margin-top: 3px; color: #77827c; font-size: 10px; }
+      .switch { width: 38px; height: 22px; border-radius: 99px; padding: 3px; background: var(--sage); }
+      .switch::after { content: ""; display: block; width: 16px; height: 16px; margin-left: 16px; border-radius: 50%; background: #fff; }
+      .manage { margin-top: 17px; text-align: center; color: #2f6c5d; font-size: 12px; font-weight: 850; }
+
+      .privacy-note {
+        position: absolute;
+        z-index: 3;
+        left: 29px;
+        bottom: 27px;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        border: 1px solid #c6d9d0;
+        border-radius: 11px;
+        padding: 10px 12px;
+        background: rgba(237, 245, 241, .94);
+        color: #496158;
+        font-size: 11px;
+        font-weight: 720;
+      }
+
+      .privacy-note::before { content: "✓"; display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; background: #cfe2d8; color: #2f6c5d; }
+
+      .cursor {
+        position: absolute;
+        z-index: 20;
+        display: none;
+        width: 25px;
+        height: 32px;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .26));
+      }
+
+      .cursor svg { display: block; width: 100%; height: 100%; }
+
+      .scene-private .overlay, .scene-private .cursor { display: none; }
+      .scene-private .feed-layout, .scene-private .site-header { filter: saturate(.75); }
+      .scene-private .page::after { content: ""; position: absolute; z-index: 3; inset: 0; background: rgba(36, 57, 49, .12); pointer-events: none; }
+      .scene-private .popup-panel, .scene-private .privacy-note { z-index: 4; }
+
+      .scene-choice .copy h1 { font-size: 59px; }
+      .scene-choice .proof { display: grid; width: 210px; }
+      .scene-choice .proof span { padding-inline: 14px; }
+      .scene-choice .dialog { box-shadow: 0 28px 90px rgba(4, 20, 15, .34), 0 0 0 3px rgba(209, 143, 90, .22); }
+
+      .scene-gif .copy h1 { font-size: 58px; }
+      .scene-gif .proof { display: none; }
+      .scene-gif .overlay { opacity: 0; pointer-events: none; }
+      .scene-gif .dialog { transform: translateY(12px) scale(.985); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <main class="canvas">
+      <div class="orb" aria-hidden="true"></div>
+      <header class="brand"><span class="mark" aria-hidden="true"></span><strong>Lesscroll</strong></header>
+
+      <section class="copy">
+        <p class="eyebrow">Mindful browsing, on your terms</p>
+        <h1 id="promo-title">A pause,
+not a block.</h1>
+        <p id="promo-copy">A gentle interruption when focused time crosses the limit you chose.</p>
+        <div class="proof" id="promo-proof">
+          <span>No account</span><span>No cloud</span><span>No analytics</span>
+        </div>
+      </section>
+
+      <section class="browser" aria-label="Lesscroll in a browser">
+        <div class="browser-bar">
+          <span class="browser-dot"></span><span class="browser-dot"></span><span class="browser-dot"></span>
+          <div class="address"><span class="lock"></span><span>daylight.example</span></div>
+          <span class="toolbar-mark" aria-hidden="true"></span>
+        </div>
+        <div class="page">
+          <header class="site-header"><strong class="site-logo">DAYLIGHT</strong><div class="site-nav"><span></span><span></span><span></span></div></header>
+          <div class="feed-layout">
+            <aside class="feed-sidebar"><span></span><span></span><span></span><span></span><span></span></aside>
+            <div class="feed-viewport">
+              <div class="feed-track">
+                <div class="feed-title"></div>
+                <div class="cards">
+                  <article class="card"><div class="card-art"></div><div class="card-copy"><div class="line"></div><div class="line short"></div></div></article>
+                  <article class="card"><div class="card-art"></div><div class="card-copy"><div class="line"></div><div class="line short"></div></div></article>
+                  <article class="card"><div class="card-art"></div><div class="card-copy"><div class="line"></div><div class="line short"></div></div></article>
+                  <article class="card"><div class="card-art"></div><div class="card-copy"><div class="line"></div><div class="line short"></div></div></article>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="popup-panel" hidden>
+            <div class="popup-brand"><span class="popup-mark"></span><strong>Lesscroll</strong></div>
+            <section class="popup-current">
+              <p class="popup-eyebrow">Current site</p>
+              <div class="popup-heading"><h2>daylight.example</h2><span class="status">Tracked</span></div>
+              <div class="usage">
+                <div><span>Session</span><strong>16 min</strong><div class="progress"></div></div>
+                <div><span>Today</span><strong>47 min</strong><div class="progress daily"></div></div>
+              </div>
+            </section>
+            <section class="rules">
+              <div class="rules-heading"><span>Tracked sites</span><span>2</span></div>
+              <div class="rule"><div><strong>daylight.example</strong><small>47 min</small></div><span class="switch"></span></div>
+              <div class="rule"><div><strong>news.example</strong><small>12 min</small></div><span class="switch"></span></div>
+              <div class="manage">Manage rules ↗</div>
+            </section>
+          </div>
+
+          <div class="privacy-note" hidden>Stored locally on this device</div>
+
+          <div class="overlay">
+            <section class="dialog" role="dialog" aria-label="Lesscroll interruption">
+              <div class="dialog-mark" aria-hidden="true"></div>
+              <h2>Still here?</h2>
+              <p class="dialog-message">You’ve spent 32 minutes on daylight.example</p>
+              <div class="stats">
+                <div class="stat"><span class="stat-label">This session</span><strong class="stat-value">32 min</strong></div>
+                <div class="stat"><span class="stat-label">Today</span><strong class="stat-value">47 min</strong></div>
+              </div>
+              <div class="actions">
+                <div class="action primary">Leave site</div>
+                <div class="action">Snooze (10 min)</div>
+                <div class="action continue-action">Continue intentionally</div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <div class="cursor" aria-hidden="true">
+        <svg viewBox="0 0 25 32" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 2v23l6.2-5 4.3 9 4.1-2-4.2-8.7H21L2 2Z" fill="#fff" stroke="#20302b" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </div>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const scene = params.get('scene') || 'interruption';
+      const body = document.body;
+      const title = document.querySelector('#promo-title');
+      const copy = document.querySelector('#promo-copy');
+      const proof = document.querySelector('#promo-proof');
+      const overlay = document.querySelector('.overlay');
+      const dialog = document.querySelector('.dialog');
+      const popup = document.querySelector('.popup-panel');
+      const privacyNote = document.querySelector('.privacy-note');
+      const cursor = document.querySelector('.cursor');
+      const continueAction = document.querySelector('.continue-action');
+      const feedTrack = document.querySelector('.feed-track');
+
+      const setScene = (name) => {
+        body.className = `scene-${name}`;
+        popup.hidden = name !== 'private';
+        privacyNote.hidden = name !== 'private';
+
+        if (name === 'private') {
+          title.textContent = 'Private by\ndefault.';
+          copy.textContent = 'Rules and focused-time counters stay in Chrome’s local extension storage.';
+          proof.innerHTML = '<span>No account</span><span>No cloud</span><span>No analytics</span>';
+        } else if (name === 'choice') {
+          title.textContent = 'The choice\nstays yours.';
+          copy.textContent = 'Lesscroll creates a moment of friction, then lets you decide what happens next.';
+          proof.innerHTML = '<span>Leave site</span><span>Snooze</span><span>Continue intentionally</span>';
+        } else if (name === 'gif') {
+          title.textContent = 'Pause the scroll.\nKeep the choice.';
+          copy.textContent = 'A private, local-first reminder for the sites you choose.';
+        }
+      };
+
+      window.setPromoFrame = (frame) => {
+        const arrival = Math.max(0, Math.min(1, (frame - 6) / 4));
+        const departure = Math.max(0, Math.min(1, (frame - 25) / 4));
+        const visible = arrival * (1 - departure);
+        const scroll = Math.min(frame, 6) / 6;
+        feedTrack.style.transform = `translateY(${-62 * scroll}px)`;
+        overlay.style.opacity = String(visible);
+        dialog.style.opacity = String(visible);
+        dialog.style.transform = `translateY(${12 * (1 - arrival)}px) scale(${.985 + .015 * arrival})`;
+
+        const cursorVisible = frame >= 17 && frame <= 27;
+        cursor.style.display = cursorVisible ? 'block' : 'none';
+        if (cursorVisible) {
+          const progress = Math.max(0, Math.min(1, (frame - 17) / 6));
+          const eased = 1 - Math.pow(1 - progress, 3);
+          cursor.style.left = `${1040 - 165 * eased}px`;
+          cursor.style.top = `${225 + 405 * eased}px`;
+        }
+        continueAction.classList.toggle('hovered', frame >= 22 && frame <= 25);
+        continueAction.classList.toggle('clicked', frame === 24);
+      };
+
+      setScene(scene);
+      if (scene === 'gif') window.setPromoFrame(Number(params.get('frame') || 0));
+    </script>
+  </body>
+</html>

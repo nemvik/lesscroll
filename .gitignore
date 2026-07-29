@@ -1,0 +1,18 @@
+.superpowers/
+.playwright-cli/
+.DS_Store
+node_modules/
+.pnpm-store/
+.wxt/
+.output/
+dist/
+coverage/
+
+# Local configuration and private material
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
